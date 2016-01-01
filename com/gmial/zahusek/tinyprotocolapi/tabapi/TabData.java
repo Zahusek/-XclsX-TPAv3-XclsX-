@@ -2,6 +2,7 @@ package com.gmail.zahusek.tinyprotocolapi.tabapi;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.bukkit.ChatColor;
 
@@ -11,12 +12,15 @@ import com.gmail.zahusek.tinyprotocolapi.reflect.InfoMode;
 import com.gmail.zahusek.tinyprotocolapi.wrapper.Cells;
 import com.gmail.zahusek.tinyprotocolapi.wrapper.ExpandPacket;
 import com.gmail.zahusek.tinyprotocolapi.wrapper.HnF;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 public class TabData {
 	
 	private static final String EMPTY = ChatColor.translateAlternateColorCodes('&', "&r");
 	
 	private Info[][] cell = new Info[4][20];
+	
 	private HnF hnf = new HnF("", "");
 	
 	public void setCell(int x, int y, String message, int ping) {
@@ -42,7 +46,17 @@ public class TabData {
 		hnf = new HnF(header, footer);
 	}
 	
-	protected List<ExpandPacket> getDefault() {
+	public void setHnf(List<String> header, List<String> footer) {
+		if(header == null) header = Lists.newArrayList("");
+		if(footer == null) footer = Lists.newArrayList("");
+		
+		String head = header.iterator().next() + header.stream().skip(1).map((msg) -> "\n" + msg).collect(Collectors.joining());
+		String foot = footer.iterator().next() + footer.stream().skip(1).map((msg) -> "\n" + msg).collect(Collectors.joining());
+		
+		setHnF(head, foot);
+	}
+	
+	protected Iterable<ExpandPacket> getDefault() {
 		Cells add = new Cells(InfoAction.ADD);
 		Cells displayname = new Cells(InfoAction.DISPLAYNAME);
 		Cells ping = new Cells(InfoAction.PING);
@@ -60,7 +74,7 @@ public class TabData {
 				ping.add(cell[x][y]);
 			}
 		}
-		return Arrays.asList(add, displayname, hnf = new HnF("", ""));
+		return Iterables.concat(getRemove(), Arrays.asList(add, displayname, hnf = new HnF("", "")));
 	}
 	
 	protected List<ExpandPacket> getRefresh() {
@@ -84,8 +98,9 @@ public class TabData {
 		Cells remove = new Cells(InfoAction.REMOVE);
 		
 		for(int x = 0; x < 4; x++) 
-			for(int y = 0; y < 20; y++) 
-			remove.add(cell[x][y]);
+			for(int y = 0; y < 20; y++)
+				if(cell[x][y] != null)
+					remove.add(cell[x][y]);
 		
 		return Arrays.asList(remove, new HnF("", ""));
 	}
