@@ -1,5 +1,6 @@
 package com.gmail.zahusek.tinyprotocolapi.tabapi;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -26,22 +27,32 @@ public class TabAPI implements Listener {
 		}
 		return CELLS.get(player.getUniqueId());
 	}
+	
 	public static void setSlot(Player player, int x, int y, String msg, int ping) {
 		getPlayer(player).setCell(x, y, msg, ping);
 	}
+	
 	public static void setSkin(Player player, int x, int y, String skin) {
 		getPlayer(player).setSkin(x, y, skin);
 	}
+	
 	public static void setHnF(Player player, String header, String footer) {
 		getPlayer(player).setHnF(header, footer);
 	}
+	
+	public static void setHnF(Player player, List<String> header, List<String> footer) {
+		getPlayer(player).setHnf(header, footer);
+	}
+	
 	public static void refresh(Player player) {
 		getPlayer(player).getRefresh().forEach((packet) -> packet.sendPacket(player));
 	}
+	
 	public static void base(Player player) {
 		getPlayer(player).getDefault().forEach((packet) -> packet.sendPacket(player));
 	}
-	protected void remove(Player player) {
+	
+	private void remove(Player player) {
 		getPlayer(player).getRemove().forEach((packet) -> packet.sendPacket(player));
 		CELLS.remove(player.getUniqueId());
 	}
