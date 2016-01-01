@@ -5,5 +5,4 @@
 
 ##Pre-release code ? - [Zahusek](https://www.spigotmc.org/members/zahusek.82371/)
 
-Next version ?
-![ScreenShot](http://i.imgur.com/r9O4lhX.png?2)
+![ScreenShot](http://i.imgur.com/LzpDVt1.png?1)
