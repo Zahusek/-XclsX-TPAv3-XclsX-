@@ -1,4 +1,4 @@
-package com.gmail.zahusek.tinyprotocolapi.tabapi;
+package com.gmail.zahusek.tinyprotocolapi.apis;
 
 import java.util.Arrays;
 import java.util.List;
@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 
 import org.bukkit.ChatColor;
 
-import com.gmail.zahusek.tinyprotocolapi.reflect.Info;
-import com.gmail.zahusek.tinyprotocolapi.reflect.InfoAction;
-import com.gmail.zahusek.tinyprotocolapi.reflect.InfoMode;
+import com.gmail.zahusek.tinyprotocolapi.cover.Info;
+import com.gmail.zahusek.tinyprotocolapi.cover.InfoAction;
+import com.gmail.zahusek.tinyprotocolapi.cover.InfoMode;
 import com.gmail.zahusek.tinyprotocolapi.wrapper.Cells;
 import com.gmail.zahusek.tinyprotocolapi.wrapper.ExpandPacket;
 import com.gmail.zahusek.tinyprotocolapi.wrapper.HnF;
@@ -20,30 +20,48 @@ public class TabData {
 	private static final String EMPTY = ChatColor.translateAlternateColorCodes('&', "&r");
 	
 	private Info[][] cell = new Info[4][20];
-	
 	private HnF hnf = new HnF("", "");
 	
+	public Info[][] getInfo() {
+		return cell;
+	}
+	
+	public HnF getHnF() {
+		return hnf;
+	}
+	
 	public void setCell(int x, int y, String message, int ping) {
-		try {
-			cell[x][y].setDisplayname(message);
-			cell[x][y].setPing(ping);
-		}
-		catch (Exception e) {
-			new ArrayIndexOutOfBoundsException("maxSize; x0-3 y0-19)");
-		}
+		cell[x][y].setDisplayname(message);
+		cell[x][y].setPing(ping);
 	}
 	
 	public void setSkin(int x, int y, String skin) {
-		try {
-			cell[x][y].setSkin(skin);
-		}
-		catch (Exception e) {
-			new ArrayIndexOutOfBoundsException("maxSize; x0-3 y0-19)");
-		}
+		cell[x][y].setSkin(skin);
+	}
+	
+	public void setHeader(String header) {
+		hnf.setHeader(header);
+	}
+	
+	public void setHeader(List<String> header) {
+		if(header == null) header = Lists.newArrayList("");
+		String head = header.iterator().next() + header.stream().skip(1).map((msg) -> "\n" + msg).collect(Collectors.joining());
+		setHeader(head);
+	}
+	
+	public void setFooter(String footer) {
+		hnf.setFooter(footer);
+	}
+	
+	public void setFooter(List<String> footer) {
+		if(footer == null) footer = Lists.newArrayList("");
+		String foot = footer.iterator().next() + footer.stream().skip(1).map((msg) -> "\n" + msg).collect(Collectors.joining());
+		setFooter(foot);
 	}
 	
 	public void setHnF(String header, String footer) {
-		hnf = new HnF(header, footer);
+		hnf.setHeader(header);
+		hnf.setFooter(footer);
 	}
 	
 	public void setHnf(List<String> header, List<String> footer) {
@@ -64,9 +82,9 @@ public class TabData {
 		for(int x = 0; x < 4; x++) {
 			for(int y = 0; y < 20; y++) {
 				if (cell[x][y] == null) {
-					Info def = new Info(digit(x) + digit(y), EMPTY, 0, InfoMode.NOT_SET);
-					def.setSkin("MHF_Question");
-					add.add(cell[x][y] = def);
+					Info refresh = new Info(digit(x) + digit(y), EMPTY, 0, InfoMode.NOT_SET);
+					refresh.setSkin("MHF_Question");
+					add.add(cell[x][y] = refresh);
 				}
 				cell[x][y].setDisplayname(EMPTY);
 				displayname.add(cell[x][y]);
