@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.gmail.zahusek.tinyprotocolapi.tabapi.TabAPI;
+import com.gmail.zahusek.tinyprotocolapi.apis.TabAPI;
 
 public class Test extends JavaPlugin {
 	
