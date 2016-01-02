@@ -1,4 +1,4 @@
-package com.gmail.zahusek.tinyprotocolapi.tabapi;
+package com.gmail.zahusek.tinyprotocolapi.apis;
 
 import java.util.List;
 import java.util.Map;
@@ -36,12 +36,27 @@ public class TabAPI implements Listener {
 		getPlayer(player).setSkin(x, y, skin);
 	}
 	
+	public static void setHeader(Player player, String header) {
+		getPlayer(player).setHeader(header);
+	}
+	
+	public static void setFooter(Player player, String footer) {
+		getPlayer(player).setFooter(footer);
+	}
+	
 	public static void setHnF(Player player, String header, String footer) {
 		getPlayer(player).setHnF(header, footer);
 	}
 	
 	public static void setHnF(Player player, List<String> header, List<String> footer) {
 		getPlayer(player).setHnf(header, footer);
+	}
+	public static void setHeader(Player player, List<String> header) {
+		getPlayer(player).setHeader(header);
+	}
+	
+	public static void setFooter(Player player, List<String> footer) {
+		getPlayer(player).setFooter(footer);
 	}
 	
 	public static void refresh(Player player) {
